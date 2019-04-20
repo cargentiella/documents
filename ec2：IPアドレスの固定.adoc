@@ -1,0 +1,39 @@
+= ec2：IPアドレスの固定
+
+EC2のデフォルトは、DHCPによりIPアドレスを管理し、IPアドレスを固定にしない方針。固定するならば、以下のとおり。
+
+  * IPアドレスの固定は、インスタンス作成時に設定する。
+  * IPアドレスはENIで管理（IPアドレスやMACアドレス情報を保持）され、各インスタンスにENIをアタッチ・デタッチすることでIPアドレスの割り当てを変更することが可能。
+
+
+== Method
+
+http://docs.aws.amazon.com/AWSEC2/latest/CommandLineReference/ApiReference-cmd-RunInstances.html
+
+
+This example command launches an instance with a primary IP address of 10.0.0.146 and two secondary private IP addresses of 10.0.0.148 and of 10.0.0.150 in the subnet with the ID subnet-1a2b3c4d.
+
+[source, command]
+----
+ec2-run-instances ami-1a2b3c4d -k my-key-pair -s subnet-1a2b3c4d -t c1.medium --private-ip-address 10.0.0.146 --secondary-private-ip-address 10.0.0.148 --secondary-private-ip-address 10.0.0.150
+----
+
+[source, command]
+----
+aws ec2 start-instances --instance-ids vpc-963899f3 --private-ip-address 10.255.0.181
+ec2-run-instances i-87d11675 -k kyocera-test -s subnet-75b10302 --private-ip-address 10.255.0.181
+----
+
+
+== Reference
+
+http://docs.aws.amazon.com/ja_jp/AWSEC2/latest/UserGuide/using-eni.html
+
+CLI または API からインスタンスを起動する際、プライマリ（eth0）ネットワークインターフェイスと追加のネットワークインターフェイスの両方に対して、インスタンスにアタッチするネットワークインターフェイスを指定できます。
+
+http://dev.classmethod.jp/cloud/vpcfor-infra-engineer-2/
+（非公式：わかりよい）
+
+MACアドレスとIPアドレスは共に、ENI作成後変更することはできません。異なるIPアドレスを使うためには、以下の回避方法で対応します。
+  * ENIにセカンダリIPアドレスを追加する
+  * 同じデータを持つ新規仮想マシンを作成する
