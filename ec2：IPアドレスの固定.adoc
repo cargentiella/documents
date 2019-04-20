@@ -35,5 +35,6 @@ http://dev.classmethod.jp/cloud/vpcfor-infra-engineer-2/
 （非公式：わかりよい）
 
 MACアドレスとIPアドレスは共に、ENI作成後変更することはできません。異なるIPアドレスを使うためには、以下の回避方法で対応します。
+
   * ENIにセカンダリIPアドレスを追加する
   * 同じデータを持つ新規仮想マシンを作成する
